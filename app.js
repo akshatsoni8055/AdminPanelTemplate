@@ -1,12 +1,11 @@
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var config = require('./config.json')
-var session = require("express-session")
 
-var { index, users, product, order, admin } = require('./routes')
+var { admin } = require('./routes')
 
 var app = express();
 
@@ -15,22 +14,12 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
-app.use("/admin", admin)
-app.use(session({
-  secret: config.secretKey,
-  saveUninitialized: true,
-  resave: false
-}))
+app.use('/', admin)
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', index);
-app.use('/users', users);
-app.use('/product', product);
-app.use('/order', order);
-
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
