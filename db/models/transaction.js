@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
     console.log(lastTxn)
     lastTxn = lastTxn || { balance: 0 }
     txn.transaction = txn.type === 'Deposit' ? txn.transaction : -txn.transaction
-    txn.balance = lastTxn.balance + txn.transaction
+    txn.balance = lastTxn.balance + parseInt(txn.transaction)
   })
   return Transaction;
 };
