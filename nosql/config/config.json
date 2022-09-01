@@ -1,0 +1,8 @@
+{
+    "development": {
+        "DATABASE_URI": "mongodb+srv://akshatsoni8055:ak47soni@cluster0.ptfks.mongodb.net/dsa"
+    },
+    "production": {
+        "use_env_variable": "DATABASE_URI"
+    }
+}

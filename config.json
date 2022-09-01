@@ -2,7 +2,7 @@
     "jwtSecret": "sssh... it's a secret",
     "secretKey": "sssh... it's also a secret",
      "branding": {
-        "companyName": "Kesar",
+        "companyName": "E-Commerce",
         "logo": false,
         "softwareBrothers": false
     }

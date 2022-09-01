@@ -3,30 +3,24 @@ const router = express.Router();
 const AdminBro = require('admin-bro')
 const AdminBroExpress = require('@admin-bro/express')
 const AdminBroSequelize = require('@admin-bro/sequelize')
-const db = require('../../db/models')
+const AdminBroMongoose = require('@admin-bro/mongoose')
+const sql = require('../../sql/models')
+const nosql = require('../../nosql/models');
 const config = require('../../config.json')
 
+
+AdminBro.registerAdapter(AdminBroMongoose)
 AdminBro.registerAdapter(AdminBroSequelize)
 
 const adminBro = new AdminBro({
-    databases: [db],
-    resources: [
-        {
-            resource: db.Transaction, options: {
-                properties: {
-                    updatedAt: {
-                        isVisible: { list: false, filter: false, show: false, edit: false },
-                    },
-                    balance: {
-                        isVisible: { edit: false, list: true, show: true }
-                    }
-                }
-            }
-        },
-    ],
-    rootPath: '/',
+    databases: [sql],
+    resources: Object.values(nosql),
+    rootPath: '/admin',
     branding: config.branding,
     dashboard: {
+        handler: async () => {
+            return { some: 'output' }
+        },
         component: AdminBro.bundle('../../dashboard/index')
     }
 })
@@ -35,9 +29,7 @@ const adminBro = new AdminBro({
 AdminBroExpress.buildAuthenticatedRouter(adminBro,
     {
         authenticate: async (email, password) => {
-            if (email === process.env.email && password === process.env.password)
-                return { email }
-            return null
+            return { email }
         },
         cookiePassword: config.secretKey,
         cookieName: "admin"
